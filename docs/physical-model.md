@@ -30,8 +30,8 @@
 | `employee_id` | Идентификатор                 | `INTEGER`     | `PRIMARY KEY` |
 | `cinema_id`   | Кинотеатр, в котором работает | `INTEGER`     | `FOREIGN KEY` |
 | `first_name`  | Имя                           | `VARCHAR(50)` | `NOT NULL`    |
-| `mid_name`    | Среднее имя                   | `VARCHAR(50)` | `NOT NULL`    |
-| `last_name`   | Фамилия                       | `VARCHAR(50)` | `NOT NULL`    |
+| `mid_name`    | Фамилия                       | `VARCHAR(50)` | `NOT NULL`    |
+| `last_name`   | Отчество                      | `VARCHAR(50)` |               |
 | `birth_date`  | Дата рождения                 | `DATE`        | `NOT NULL`    |
 
 Таблица `cn.employees_history`:
