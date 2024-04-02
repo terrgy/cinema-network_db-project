@@ -67,54 +67,58 @@ CREATE TABLE IF NOT EXISTS cn.client
 
 CREATE TABLE IF NOT EXISTS cn.loyalty_card
 (
-    loyalty_card_number BIGINT NOT NULL PRIMARY KEY CHECK (loyalty_card_number >= 100000000000000 AND
-                                                           loyalty_card_number <= 999999999999999),
-    client_id INTEGER,
-    bonus_amount INTEGER NOT NULL CHECK (bonus_amount >= 0),
-    create_dttm TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    loyalty_card_number BIGINT  NOT NULL PRIMARY KEY CHECK (loyalty_card_number >= 100000000000000 AND
+                                                            loyalty_card_number <= 999999999999999),
+    client_id           INTEGER,
+    bonus_amount        INTEGER NOT NULL CHECK (bonus_amount >= 0),
+    create_dttm         TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_customer_id FOREIGN KEY (client_id) REFERENCES cn.client(client_id) ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT fk_customer_id FOREIGN KEY (client_id) REFERENCES cn.client (client_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS cn.order (
-    order_id INTEGER NOT NULL PRIMARY KEY,
-    cinema_id INTEGER,
+CREATE TABLE IF NOT EXISTS cn.order
+(
+    order_id    INTEGER NOT NULL PRIMARY KEY,
+    cinema_id   INTEGER,
     employee_id INTEGER,
-    client_id INTEGER,
-    order_dttm TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    client_id   INTEGER,
+    order_dttm  TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_cinema_id FOREIGN KEY (cinema_id) REFERENCES cn.cinema(cinema_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_employee_id FOREIGN KEY (employee_id) REFERENCES cn.employee(employee_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_client_id FOREIGN KEY (client_id) REFERENCES cn.client(client_id) ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT fk_cinema_id FOREIGN KEY (cinema_id) REFERENCES cn.cinema (cinema_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_employee_id FOREIGN KEY (employee_id) REFERENCES cn.employee (employee_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_client_id FOREIGN KEY (client_id) REFERENCES cn.client (client_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS cn.products_in_orders (
-    order_id INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS cn.products_in_orders
+(
+    order_id   INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
 
     PRIMARY KEY (order_id, product_id),
-    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order(order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES cn.product(product_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order (order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES cn.product (product_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS cn.ticket (
-    ticket_id INTEGER NOT NULL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
-    session_id INTEGER NOT NULL,
-    row SMALLINT NOT NULL CHECK (row > 0),
-    seat SMALLINT NOT NULL CHECK (seat > 0),
+CREATE TABLE IF NOT EXISTS cn.ticket
+(
+    ticket_id  INTEGER  NOT NULL PRIMARY KEY,
+    order_id   INTEGER  NOT NULL,
+    session_id INTEGER  NOT NULL,
+    row        SMALLINT NOT NULL CHECK (row > 0),
+    seat       SMALLINT NOT NULL CHECK (seat > 0),
 
-    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order(order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_session_id FOREIGN KEY (session_id) REFERENCES cn.session(session_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order (order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_session_id FOREIGN KEY (session_id) REFERENCES cn.session (session_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS cn.payment (
-    payment_id INTEGER NOT NULL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS cn.payment
+(
+    payment_id          INTEGER        NOT NULL PRIMARY KEY,
+    order_id            INTEGER        NOT NULL,
     loyalty_card_number BIGINT,
-    payment_amount DECIMAL(10, 2) NOT NULL CHECK (payment_amount > 0),
-    discount_amount DECIMAL(10, 2) NOT NULL CHECK (discount_amount >= 0),
+    payment_amount      DECIMAL(10, 2) NOT NULL CHECK (payment_amount > 0),
+    discount_amount     DECIMAL(10, 2) NOT NULL CHECK (discount_amount >= 0),
 
-    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order(order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_loyalty_card_number FOREIGN KEY (loyalty_card_number) REFERENCES cn.loyalty_card(loyalty_card_number) ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order (order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_loyalty_card_number FOREIGN KEY (loyalty_card_number) REFERENCES cn.loyalty_card (loyalty_card_number) ON DELETE SET NULL ON UPDATE CASCADE
 );
