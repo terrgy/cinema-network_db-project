@@ -108,13 +108,14 @@ CREATE TABLE IF NOT EXISTS cn.ticket
     seat       SMALLINT NOT NULL CHECK (seat > 0),
 
     CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES cn.order (order_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_session_id FOREIGN KEY (session_id) REFERENCES cn.session (session_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT fk_session_id FOREIGN KEY (session_id) REFERENCES cn.session (session_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT unique_ticket UNIQUE (session_id, row, seat)
 );
 
 CREATE TABLE IF NOT EXISTS cn.payment
 (
     payment_id          INTEGER        NOT NULL PRIMARY KEY,
-    order_id            INTEGER        NOT NULL,
+    order_id            INTEGER        NOT NULL UNIQUE,
     loyalty_card_number BIGINT,
     payment_amount      DECIMAL(10, 2) NOT NULL CHECK (payment_amount > 0),
     discount_amount     DECIMAL(10, 2) NOT NULL CHECK (discount_amount >= 0),
