@@ -1,7 +1,7 @@
 -- Индекс по времени для сеансов для быстрого поиска
 CREATE INDEX IF NOT EXISTS session_time_btree ON cn.session USING btree (time ASC);
--- Отдельный индекс для быстрого поиска всех сеансов по конкретному дню (например, все сеансы на сегодня)
-CREATE INDEX IF NOT EXISTS session_time_day ON cn.session (extract(DAY FROM time));
+-- Отдельный индекс для быстрого поиска всех сеансов по конкретной дате (например, все сеансы на сегодня)
+CREATE INDEX IF NOT EXISTS session_time_date ON cn.session (CAST(time AS DATE));
 
 -- Индекс по времени для заказов для быстрого поиска
 CREATE INDEX IF NOT EXISTS order_time_btree ON cn.order USING btree (order_dttm ASC);

@@ -2,7 +2,7 @@
 CREATE OR REPLACE VIEW cn.today_sessions AS
 SELECT *
 FROM cn.session s
-WHERE extract(DAY FROM s.time) = extract(DAY FROM NOW());
+WHERE s.time::DATE = NOW()::DATE;
 
 -- Сегодняшние фильмы
 CREATE OR REPLACE VIEW cn.today_films(film_id, title, cinema_id) AS
